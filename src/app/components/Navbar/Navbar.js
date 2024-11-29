@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 
 export default function Navbar() {
+
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => setIsOpen(!isOpen);
@@ -66,6 +67,13 @@ export default function Navbar() {
               >
                 Contact
               </Link>
+              <Link
+                href="/login"
+                className="text-white px-3 py-2 rounded-md text-lg hover:bg-red-600"
+              >
+                Login
+              </Link>
+             
             </div>
           </div>
         </div>
