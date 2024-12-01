@@ -9,19 +9,57 @@ export default function Signup() {
     password: "",
     confirmPassword: "",
   });
+  const [isLoading, setIsLoading] = useState(false); // To show loading status
+  const [message, setMessage] = useState(""); // To display success or error messages
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!");
+      setMessage("Passwords do not match!");
       return;
     }
-    console.log("Form Data:", formData);
+
+    try {
+      setIsLoading(true);
+      setMessage("");
+
+      // Make POST request to the backend API
+      const response = await fetch("http://localhost:5000/api/trainee/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setMessage("Signup successful! You can now log in.");
+        setFormData({
+          name: "",
+          email: "",
+          password: "",
+          confirmPassword: "",
+        });
+      } else {
+        setMessage(data.message || "Signup failed! Please try again.");
+      }
+    } catch (error) {
+      console.error("Error during signup:", error);
+      setMessage("An error occurred. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -33,6 +71,17 @@ export default function Signup() {
         <p className="text-sm text-center text-gray-500">
           Sign up to get started
         </p>
+        {message && (
+          <div
+            className={`text-center text-sm ${
+              message.includes("successful")
+                ? "text-green-600"
+                : "text-red-600"
+            }`}
+          >
+            {message}
+          </div>
+        )}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label
@@ -108,9 +157,12 @@ export default function Signup() {
           </div>
           <button
             type="submit"
-            className="w-full px-4 py-2 text-white bg-green-600 rounded-lg hover:bg-green-700 focus:ring focus:ring-green-400"
+            className={`w-full px-4 py-2 text-white bg-green-600 rounded-lg hover:bg-green-700 focus:ring focus:ring-green-400 ${
+              isLoading ? "opacity-50 cursor-not-allowed" : ""
+            }`}
+            disabled={isLoading}
           >
-            Sign Up
+            {isLoading ? "Signing Up..." : "Sign Up"}
           </button>
         </form>
         <p className="text-sm text-center text-gray-600">

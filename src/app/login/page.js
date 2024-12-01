@@ -6,18 +6,42 @@ import { useRouter } from "next/navigation";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const router = useRouter();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    // You can replace this logic with your actual login functionality
-    // For example, making a request to a backend API for login
-    if (email === "user@example.com" && password === "password123") {
-      // Simulate a successful login
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch("http://localhost:5000/api/trainee/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Login failed");
+      }
+
+      const data = await response.json();
+      console.log("Login successful:", data);
+
+      // Save the token (e.g., in localStorage or cookies)
+      localStorage.setItem("token", data.token);
+
+      // Redirect to the dashboard
       router.push("/dashboard");
-    } else {
-      alert("Invalid credentials");
+    } catch (err) {
+      console.error("Error during login:", err.message);
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -65,32 +89,13 @@ export default function Login() {
               className="w-full px-4 py-2 mt-1 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-400"
             />
           </div>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <input
-                id="remember-me"
-                type="checkbox"
-                className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring focus:ring-blue-400"
-              />
-              <label
-                htmlFor="remember-me"
-                className="ml-2 text-sm text-gray-600"
-              >
-                Remember me
-              </label>
-            </div>
-            <a
-              href="#"
-              className="text-sm font-medium text-blue-600 hover:underline"
-            >
-              Forgot password?
-            </a>
-          </div>
+          {error && <p className="text-sm text-red-500">{error}</p>}
           <button
             type="submit"
             className="w-full px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring focus:ring-blue-400"
+            disabled={loading}
           >
-            Log In
+            {loading ? "Logging in..." : "Log In"}
           </button>
         </form>
         <p className="text-sm text-center text-gray-600">
