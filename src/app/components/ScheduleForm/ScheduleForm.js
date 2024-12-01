@@ -14,7 +14,7 @@ export default function ScheduleForm() {
   // Fetch existing class schedules
   useEffect(() => {
     const fetchSchedules = async () => {
-      const response = await fetch('http://localhost:5000/api/schedules');
+      const response = await fetch('https://gym-backend-6sb6.onrender.comapi/schedules');
       const data = await response.json();
       setSchedules(data);
     };
@@ -45,7 +45,7 @@ export default function ScheduleForm() {
   // Create new schedule
   const handleCreateSchedule = async () => {
     if (validateForm()) {
-      const response = await fetch('http://localhost:5000/api/schedules', {
+      const response = await fetch('https://gym-backend-6sb6.onrender.comapi/schedules', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

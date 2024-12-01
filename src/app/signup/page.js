@@ -29,7 +29,7 @@ export default function Signup() {
       setMessage("");
 
       // Make POST request to the backend API
-      const response = await fetch("http://localhost:5000/api/trainee/register", {
+      const response = await fetch("https://gym-backend-6sb6.onrender.comapi/trainee/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

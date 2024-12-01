@@ -10,7 +10,7 @@ export default function TrainerList() {
   // Fetch trainers from API
   useEffect(() => {
     const fetchTrainers = async () => {
-      const response = await fetch("http://localhost:5000/api/trainer");
+      const response = await fetch("https://gym-backend-6sb6.onrender.comapi/trainer");
       const data = await response.json();
       setTrainers(data);
     };
@@ -20,7 +20,7 @@ export default function TrainerList() {
   // Add new trainer
   const handleAddTrainer = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/admin/add-trainer", {
+      const response = await fetch("https://gym-backend-6sb6.onrender.comapi/admin/add-trainer", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -47,7 +47,7 @@ export default function TrainerList() {
 
   // Update trainer
   const handleUpdateTrainer = async () => {
-    const response = await fetch(`http://localhost:5000/api/trainer/${editTrainer._id}`, {
+    const response = await fetch(`https://gym-backend-6sb6.onrender.comapi/trainer/${editTrainer._id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -64,7 +64,7 @@ export default function TrainerList() {
 
   // Delete trainer
   const handleDeleteTrainer = async (id) => {
-    await fetch(`http://localhost:5000/api/trainer/${id}`, {
+    await fetch(`https://gym-backend-6sb6.onrender.comapi/trainer/${id}`, {
       method: "DELETE",
     });
     setTrainers(trainers.filter((trainer) => trainer._id !== id));

@@ -20,7 +20,7 @@ export default function ClassBooking() {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:5000/api/book-class", {
+      const response = await fetch("https://gym-backend-6sb6.onrender.comapi/book-class", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
